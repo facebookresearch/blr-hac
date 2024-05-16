@@ -1,0 +1,14 @@
+# @package hydra.launcher
+submitit_folder: data/.submitit/%j
+timeout_min: 1440
+cpus_per_task: 20
+gpus_per_node: 1
+tasks_per_node: 1
+mem_gb: 32
+nodes: 1
+name: ${hydra.job.name}
+_target_: hydra_plugins.hydra_submitit_launcher.submitit_launcher.SlurmLauncher
+partition: 
+comment: "Training model for online, adaptive collaboration"
+signal_delay_s: 120
+max_num_timeout: 5

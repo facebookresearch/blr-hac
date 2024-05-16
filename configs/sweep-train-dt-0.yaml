@@ -1,0 +1,80 @@
+defaults:
+  - override hydra/launcher: submitit_slurm
+  - _self_
+
+### DATASET
+N_MEANS: 5
+N_LOCATIONS: 25
+N_OBJECTS: 25
+STDDEV: 0.1
+CAPACITY: 1
+
+### OPTIMIZER
+learning_rate: 1e-2
+weight_decay: 1e-4
+
+## TRAINING 
+num_eval_episodes: 250
+max_iters: 1000
+num_steps_per_iter: 1000
+device: 'cuda'
+load_from_state: False
+state_name: 'checkpoint'
+
+## Eval
+eval_fn: 'eval_online'
+eval_save_name: 'test'
+bootstrap: True
+reload_every: 2
+num_eval: 5
+update_lr: 10
+
+### BATCH DATA
+batch_size: 640
+K: 50
+dropout: 0.25
+
+### WANDB
+log_to_wandb: False
+wandb_name: 'shallow-linear-baseline'
+save_name: 'tilr_final_0'
+
+### MODEL
+strategy_encoder: 'Transformer' # Linear, MLP, Transformer
+policy: 'IRL' # IRL, MLP
+d_embed: 0 # 0 for onehot
+d_hidden: 256
+n_pref_layers: 10
+n_act_layers: 5
+sz_vocab: 208
+activation_function: 'relu'
+
+# Transformer specific 
+n_positions: 1024
+n_head: 2
+n_inner: 0
+resid_pdrop: 0.1
+embd_pdrop: 0.1
+attn_pdrop: 0.1
+
+hydra:
+  run:
+    dir: hydra-test
+  sweep:
+    dir: decision-transformer-sweep-again
+    subdir: '.'
+  sweeper:
+    params:
+      wandb_name: 'bc-baseline-final'
+      d_hidden: 256 #choice(32,64,128,256)
+      n_pref_layers: 10 # choice(3,5,7,10,12)
+      n_head: choice(2)
+      learning_rate: 1e-4 # choice(1e-4, 1e-5)
+      K: 50
+      device: 'cuda'
+      log_to_wandb: True
+      N_OBJECTS: 25 #choice(5, 10, 25)
+      strategy_encoder: 'Transformer' # choice('Linear', 'MLP', 'Transformer')
+      N_LOCATIONS: 25
+      load_from_state: False
+      state_name: 'checkpoint'

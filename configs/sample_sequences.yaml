@@ -1,0 +1,29 @@
+defaults:
+  - override hydra/launcher: submitit_slurm
+  - _self_
+
+dataroot: 'datasets'
+
+MAX_LOCATIONS: 100
+MAX_OBJECTS: 100
+N_MEANS: 5
+
+N_SEQS_TRAIN: 1000
+N_SEQS_TEST: 1000
+SAVE_DATA: TRUE
+
+N_LOCATIONS: 5
+N_OBJECTS: 5
+STDDEV: 0.1
+CAPACITY: 1
+
+hydra:
+  sweep:
+    dir: 'datasets/hydra-output/sample_sequences'
+    subdir: ${hydra.job.override_dirname}
+  sweeper:
+    params:
+      N_OBJECTS: 5, 10, 25, 50, 75, 100
+      N_LOCATIONS: 5, 10, 25, 50, 75, 100
+      CAPACITY: .5, 1
+      STDDEV: .1, .2, .5

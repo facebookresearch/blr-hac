@@ -1,0 +1,22 @@
+defaults:
+  # - override hydra/launcher: submitit_slurm
+  - _self_
+
+N_MEANS: 5
+N_OBJECTIVES_TRAIN: 100
+N_OBJECTIVES_TEST: 100
+N_LOCATIONS: 5
+N_OBJECTS: 5
+dataroot: 'datasets'
+STDDEV: 0.1
+
+hydra:
+  sweep:
+    dir: 'datasets/hydra-output/sample_objectives'
+    subdir: ${hydra.job.override_dirname}
+  sweeper:
+    params:
+      N_MEANS: 5
+      N_OBJECTS: 5, 10, 25, 50, 75, 100
+      N_LOCATIONS: 5, 10, 25, 50, 75, 100
+      STDDEV: .1, .2, .5
